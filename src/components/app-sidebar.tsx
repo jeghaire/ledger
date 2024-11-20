@@ -12,6 +12,7 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
+  Workflow,
 } from "lucide-react";
 
 import { NavMain } from "~/components/nav-main";
@@ -25,37 +26,56 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "~/components/ui/sidebar";
+import { APP_USER } from "~/core/constants";
 
 // This is sample data.
 const data = {
   user: {
-    name: "Mavi",
-    email: "hi@mavi.com",
-    avatar: "/mavi.jpg",
+    name: APP_USER.name,
+    email: APP_USER.email,
+    image: APP_USER.image,
   },
   teams: [
     {
-      name: "Acme Inc",
+      name: "Ledger Inc",
       logo: GalleryVerticalEnd,
       plan: "Enterprise",
     },
     {
-      name: "Acme Corp.",
+      name: "Mavi Inc",
       logo: AudioWaveform,
       plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
     },
   ],
   navMain: [
     {
+      title: "Records",
+      url: "/dashboard",
+      icon: Workflow,
+      isActive: true,
+      items: [
+        {
+          title: "Transaction",
+          url: "/dashboard/transaction",
+        },
+        {
+          title: "Invoices",
+          url: "/dashboard/invoices",
+        },
+        {
+          title: "Inventory",
+          url: "/dashboard/inventory",
+        },
+        {
+          title: "Sales",
+          url: "#",
+        },
+      ],
+    },
+    {
       title: "Playground",
       url: "#",
       icon: SquareTerminal,
-      isActive: true,
       items: [
         {
           title: "History",

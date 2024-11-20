@@ -1,20 +1,15 @@
-import {
-  lusitana,
-  clash_display,
-  open_sans,
-  geistSans,
-  geistMono,
-} from "~/app/fonts";
-import type { Metadata } from "next";
+import { lusitana, geistSans, openSans } from "~/app/fonts";
 import "./globals.css";
+import type { Metadata } from "next";
 import { APP_NAME } from "~/core/constants";
+import { Toaster } from "~/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: {
     template: `%s | ${APP_NAME}`,
     default: `${APP_NAME}`,
   },
-  description: "The official HEOSL dashboard",
+  description: `The official ${APP_NAME} ERP dashboard`,
 };
 
 export default function RootLayout({
@@ -25,9 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${lusitana.variable} ${clash_display.variable} ${open_sans.variable} ${geistSans.variable} ${geistMono.variable} font-geist_sans antialiased`}
+        className={`${lusitana.variable} ${geistSans.variable} ${openSans.variable} font-openSans antialiased`}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );
