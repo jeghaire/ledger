@@ -49,24 +49,24 @@ export function AddItemForm() {
 
   console.log("State:\n", state);
 
-  async function onSubmit(data: ItemFormValues) {
-    const formData = new FormData();
-    formData.append("item_name", data.name);
-    formData.append("current_price", data.selling_price.toString());
-    formData.append("cost_price", data.cost_price.toString());
-    formData.append("stock_quantity", data.in_stock.toString());
-    formData.append("category", data.category);
-    console.log(await formAction(formData));
+  // async function onSubmit(data: ItemFormValues) {
+  //   const formData = new FormData();
+  //   formData.append("item_name", data.name);
+  //   formData.append("current_price", data.selling_price.toString());
+  //   formData.append("cost_price", data.cost_price.toString());
+  //   formData.append("stock_quantity", data.in_stock.toString());
+  //   formData.append("category", data.category);
+  //   console.log(await formAction(formData));
 
-    toast({
-      title: "Item added successfully",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-  }
+  //   toast({
+  //     title: "Item added successfully",
+  //     description: (
+  //       <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+  //         <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+  //       </pre>
+  //     ),
+  //   });
+  // }
 
   return (
     <Form {...form}>
@@ -139,7 +139,9 @@ export function AddItemForm() {
                   </SelectTrigger>
                   <SelectContent>
                     {inventoryCategories.map((cat) => (
-                      <SelectItem value={cat.value}>{cat.label}</SelectItem>
+                      <SelectItem key={cat.value} value={cat.value}>
+                        {cat.label}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>

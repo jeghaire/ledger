@@ -45,11 +45,12 @@ export async function createInventory(
   }
 
   try {
-    const { rows } = await sql`
+    await sql`
       INSERT INTO inventory (name, cost_price, selling_price, in_stock, category, created_by, updated_by)
       VALUES (${name}, ${cost_price}, ${selling_price}, ${in_stock}, ${category}, 'jomavi@ledger.io', 'jomavi@ledger.io')
     `;
   } catch (error) {
+    console.error(error);
     return { message: "Database Error: Failed to Create Invoice." };
   }
 
@@ -85,6 +86,7 @@ export async function updateInventory(
   //     WHERE id = ${id}
   //   `;
   // } catch (error) {
+  // console.error(error);
   //   return { message: "Database Error: Failed to Update Inventory." };
   // }
 
@@ -100,6 +102,7 @@ export async function deleteInventory(id: string) {
     revalidatePath("/dashboard/inventory");
     return { message: "Deleted Inventory." };
   } catch (error) {
+    console.error(error);
     return { message: "Database Error: Failed to Delete Inventory." };
   }
 }
