@@ -95,13 +95,13 @@ export async function updateInventory(
   redirect("/dashboard/inventory");
 }
 
-export async function deleteItem(id: string) {
+export async function deleteItem(id: string): Promise<void> {
   try {
     await sql`DELETE FROM inventory WHERE id = ${id}`;
     revalidatePath("/dashboard/inventory");
-    return { message: "Deleted Inventory." };
+    // return { message: "Deleted Inventory." };
   } catch (error) {
     console.error(error);
-    return { message: "Database Error: Failed to Delete Inventory." };
+    // return { message: "Database Error: Failed to Delete Inventory." };
   }
 }
