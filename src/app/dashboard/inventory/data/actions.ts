@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { itemFormSchema, newItemSchema } from "./schema";
+import { newItemSchema } from "./schema";
 import { sql } from "@vercel/postgres";
 import { redirect } from "next/navigation";
 

@@ -27,7 +27,7 @@ export async function addToInventory({
   category: string;
 }) {
   try {
-    const data = await sql`
+    await sql`
       INSERT INTO inventory (name, cost_price, selling_price, in_stock, category, created_by, updated_by)
       VALUES (${name}, ${cost_price}, ${selling_price}, ${in_stock}, ${category}, 'jomavi@ledger.io', 'jomavi@ledger.io')
     `;

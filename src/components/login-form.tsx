@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 
 export default function LoginForm() {
   const [state, dispatch] = useFormState(authenticate, undefined);
+  const { pending } = useFormStatus();
 
   return (
     <form action={dispatch} className="space-y-3">
@@ -61,7 +62,7 @@ export default function LoginForm() {
             </div>
           </div>
         </div>
-        <Button className="mt-4 w-full">
+        <Button className="mt-4 w-full" aria-disabled={pending}>
           Log in
           <ArrowRight className="ml-auto h-5 w-5 text-gray-50" />
         </Button>

@@ -4,12 +4,8 @@ import { InvoicesTableType } from "~/lib/definitions";
 import InvoiceStatus from "./status";
 
 export default function InvoicesTable({
-  query,
-  currentPage,
   invoices,
 }: {
-  query: string;
-  currentPage: number;
   invoices: InvoicesTableType[];
 }) {
   return (
