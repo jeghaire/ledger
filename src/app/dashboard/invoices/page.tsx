@@ -44,11 +44,7 @@ export default async function Page({
           key={query + currentPage}
           fallback={<InvoicesTableSkeleton />}
         >
-          <InvoicesTable
-            query={query}
-            currentPage={currentPage}
-            invoices={invoices}
-          />
+          <InvoicesTable invoices={invoices} />
         </Suspense>
         <div className="mt-5 flex w-full justify-center">
           <Pagination totalPages={totalPages} />
