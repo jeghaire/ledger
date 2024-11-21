@@ -54,6 +54,26 @@ export const columns: ColumnDef<ItemType>[] = [
     },
   },
   {
+    id: "Sales Price",
+    accessorKey: "selling_price",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Sales Price" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="truncate font-medium">
+            {/* {row.getValue("Sales Price")} */}
+            {formatCurrency(row.getValue("Sales Price"))}
+          </span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+  },
+  {
     id: "Cost Price",
     accessorKey: "cost_price",
     header: ({ column }) => (
@@ -65,26 +85,6 @@ export const columns: ColumnDef<ItemType>[] = [
           <span className="truncate font-medium">
             {/* {row.getValue("Cost Price")} */}
             {formatCurrency(row.getValue("Cost Price"))}
-          </span>
-        </div>
-      );
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-  },
-  {
-    id: "Current Price",
-    accessorKey: "selling_price",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Current Price" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="truncate font-medium">
-            {/* {row.getValue("Current Price")} */}
-            {formatCurrency(row.getValue("Current Price"))}
           </span>
         </div>
       );

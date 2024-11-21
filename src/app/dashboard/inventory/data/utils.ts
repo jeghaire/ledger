@@ -6,7 +6,7 @@ export async function getItems() {
   noStore();
 
   try {
-    const data = await sql<ItemType>`SELECT * FROM inventory`;
+    const data = await sql<ItemType>`SELECT * FROM inventory ORDER BY updated_at DESC;`;
     return data.rows;
   } catch (error) {
     console.error("Database Error:", error);
