@@ -6,7 +6,7 @@ import {
   InvoicesTableType,
   LatestInvoiceRaw,
   User,
-  Revenue
+  Revenue,
 } from "./definitions";
 import { formatCurrency } from "./utils";
 import { unstable_noStore as noStore } from "next/cache";

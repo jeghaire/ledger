@@ -5,12 +5,7 @@ import Link from "next/link";
 import { createInvoice } from "~/lib/actions";
 import { useFormState } from "react-dom";
 import { Button } from "../ui/button";
-import {
-  Check,
-  CircleDollarSign,
-  Clock,
-  UserCircle,
-} from "lucide-react";
+import { Check, CircleDollarSign, Clock, UserCircle } from "lucide-react";
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
   const initialState = { message: null, errors: {} };

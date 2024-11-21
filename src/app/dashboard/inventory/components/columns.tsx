@@ -2,12 +2,12 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "~/components/ui/checkbox";
-import { Item } from "../data/schema";
+import { ItemType } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { formatCurrency } from "../data/utils";
 
-export const columns: ColumnDef<Item>[] = [
+export const columns: ColumnDef<ItemType>[] = [
   {
     id: "actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,

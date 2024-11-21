@@ -12,9 +12,3 @@ export const geistSans = localFont({
   variable: "--font-geist-sans",
   weight: "100 900",
 });
-
-export const openSans = Open_Sans({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-open-sans",
-});

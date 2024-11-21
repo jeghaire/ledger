@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function PersonnelPage() {
-  const items = await getItems();
+  const items = (await getItems()) ?? [];
 
   return (
     <>

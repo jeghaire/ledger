@@ -1,10 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { ItemFormSchema } from "./schema";
+import { itemFormSchema, newItemSchema } from "./schema";
 import { sql } from "@vercel/postgres";
 import { redirect } from "next/navigation";
-
 
 export type FormState = {
   errors?: {
@@ -22,26 +21,23 @@ export async function createInventory(
   data: FormData,
 ): Promise<FormState> {
   const formData = Object.fromEntries(data);
-  const parsedData = ItemFormSchema.safeParse(formData);
+  const parsedData = newItemSchema.safeParse(formData);
 
   if (!parsedData.success) {
     return {
       errors: parsedData.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create Invoice.",
+      message: "Missing Fields. Failed to add item to Inventory.",
     };
   }
 
-  const {
-    name,
-    cost_price,
-    selling_price,
-    in_stock,
-    category,
-  } = parsedData.data;
+  const { name, cost_price, selling_price, in_stock, category } =
+    parsedData.data;
+
+  // Do vaidation checks here
   if (in_stock < 5) {
     return {
       message: "Stock cannot be less that five",
-    }
+    };
   }
 
   try {
@@ -51,7 +47,7 @@ export async function createInventory(
     `;
   } catch (error) {
     console.error(error);
-    return { message: "Database Error: Failed to Create Invoice." };
+    return { message: "Database Error: Failed to add item to Inventory." };
   }
 
   revalidatePath("/dashboard/inventory");
@@ -61,44 +57,47 @@ export async function createInventory(
 export async function updateInventory(
   id: string,
   prevState: FormState,
-  formData: FormData,
+  data: FormData,
 ): Promise<FormState> {
-  const validatedFields = ItemFormSchema.safeParse({
-    customerId: formData.get("customerId"),
-    amount: formData.get("amount"),
-    status: formData.get("status"),
-  });
-
-  if (!validatedFields.success) {
+  const formData = Object.fromEntries(data);
+  const parsedData = newItemSchema.safeParse(formData);
+  if (!parsedData.success) {
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Update Inventory",
+      errors: parsedData.error.flatten().fieldErrors,
+      message: "Missing Fields. Failed to update Inventory.",
     };
   }
 
-  // const { customerId, amount, status } = validatedFields.data;
-  // const amountInCents = amount * 100;
+  const { name, cost_price, selling_price, in_stock, category } =
+    parsedData.data;
+  // Do vaidation checks here
+  if (in_stock < 5) {
+    return {
+      message: "Stock cannot be less that five",
+    };
+  }
 
-  // try {
-  //   await sql`
-  //     UPDATE items
-  //     SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
-  //     WHERE id = ${id}
-  //   `;
-  // } catch (error) {
-  // console.error(error);
-  //   return { message: "Database Error: Failed to Update Inventory." };
-  // }
+
+  //  updated_at = NOW()
+  try {
+
+    await sql`
+      UPDATE inventory
+      SET name = ${name}, cost_price = ${cost_price}, selling_price = ${selling_price}, in_stock = ${in_stock}, category = ${category}, updated_by = 'jomavi@ledger.io'
+      WHERE id = ${id}
+    `;
+  } catch (error) {
+    console.error(error);
+    return { message: "Database Error: Failed to update Inventory." };
+  }
 
   revalidatePath("/dashboard/inventory");
   redirect("/dashboard/inventory");
 }
 
-export async function deleteInventory(id: string) {
-  // throw new Error("Failed to Delete Invoice");
-
+export async function deleteItem(id: string) {
   try {
-    await sql`DELETE FROM items WHERE id = ${id}`;
+    await sql`DELETE FROM inventory WHERE id = ${id}`;
     revalidatePath("/dashboard/inventory");
     return { message: "Deleted Inventory." };
   } catch (error) {
@@ -106,34 +105,3 @@ export async function deleteInventory(id: string) {
     return { message: "Database Error: Failed to Delete Inventory." };
   }
 }
-
-// export async function onSubmitAction(
-//   prevState: FormState,
-//   data: FormData,
-// ): Promise<FormState> {
-//   "use server";
-//   const formData = Object.fromEntries(data);
-//   const parsed = NewItemSchema.safeParse(formData);
-
-//   console.log(formData)
-
-//   if (!parsed.success) {
-//     console.log({
-//       errors: parsed.error.flatten().fieldErrors,
-//       message: "Invalid form data. Failed to Create personnel",
-//     });
-//     return {
-//       errors: parsed.error.flatten().fieldErrors,
-//       message: "Invalid form data",
-//     };
-//   }
-
-//   if (parsed.data.stock_quantity < 1) {
-//     console.log({ message: "Cannot add item with stock level less than 1" })
-//     return {
-//       message: "Invalid Stock count"
-//     };
-//   }
-
-//   return { message: "Item added to inventory" };
-// }

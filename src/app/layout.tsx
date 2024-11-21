@@ -1,4 +1,4 @@
-import { lusitana, geistSans, openSans } from "~/app/fonts";
+import { lusitana, geistSans } from "~/app/fonts";
 import "./globals.css";
 import type { Metadata } from "next";
 import { APP_NAME } from "~/core/constants";
@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${lusitana.variable} ${geistSans.variable} ${openSans.variable} font-openSans antialiased`}
+        className={`${lusitana.variable} ${geistSans.variable} font-geistSans antialiased`}
       >
         {children}
         <Toaster />

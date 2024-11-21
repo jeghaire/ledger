@@ -13,6 +13,7 @@ import {
 import { ItemSchema } from "../data/schema";
 import Link from "next/link";
 import { Ellipsis } from "lucide-react";
+import { DeleteItem } from "./buttons";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -47,10 +48,12 @@ export function DataTableRowActions<TData>({
         <DropdownMenuItem>View</DropdownMenuItem>
         <DropdownMenuItem>Update Stock</DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href={`/dashboard/hr/${item.id}/edit`}>Edit</Link>
+          <Link href={`/dashboard/inventory/${item.id}/edit`}>Edit</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Delete</DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <DeleteItem id={item.id.toString()} />
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

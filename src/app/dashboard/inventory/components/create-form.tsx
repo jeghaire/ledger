@@ -20,57 +20,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { useToast } from "~/hooks/use-toast";
 import {
   inventoryCategories,
-  ItemFormSchema,
-  ItemFormValues,
+  newItemSchema,
+  NewItemType,
 } from "../data/schema";
 import { useFormState } from "react-dom";
 import { createInventory } from "../data/actions";
+import React from "react";
 
 export function AddItemForm() {
   const initialState = { message: null, errors: {} };
   const [state, formAction] = useFormState(createInventory, initialState);
+  const formRef = React.useRef<HTMLFormElement>(null);
 
-  const { toast } = useToast();
-
-  const form = useForm<ItemFormValues>({
-    resolver: zodResolver(ItemFormSchema),
-    defaultValues: {
-      name: "",
-      cost_price: 0,
-      selling_price: 0,
-      in_stock: 0,
-      category: "Other",
-    },
+  const form = useForm<NewItemType>({
+    resolver: zodResolver(newItemSchema),
     mode: "onChange",
   });
 
-  console.log("State:\n", state);
-
-  // async function onSubmit(data: ItemFormValues) {
-  //   const formData = new FormData();
-  //   formData.append("item_name", data.name);
-  //   formData.append("current_price", data.selling_price.toString());
-  //   formData.append("cost_price", data.cost_price.toString());
-  //   formData.append("stock_quantity", data.in_stock.toString());
-  //   formData.append("category", data.category);
-  //   console.log(await formAction(formData));
-
-  //   toast({
-  //     title: "Item added successfully",
-  //     description: (
-  //       <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-  //         <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-  //       </pre>
-  //     ),
-  //   });
-  // }
-
   return (
     <Form {...form}>
-      <form action={formAction} className="space-y-8">
+      <form
+        ref={formRef}
+        action={formAction}
+        onSubmit={(evt) => {
+          evt.preventDefault();
+          form.handleSubmit(() => {
+            formAction(new FormData(formRef.current!));
+          })(evt);
+        }}
+        className="space-y-4"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -78,46 +59,7 @@ export function AddItemForm() {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Item name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="selling_price"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Current Price</FormLabel>
-              <FormControl>
-                <Input type="number" placeholder="e.g., 500" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="cost_price"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Cost Price</FormLabel>
-              <FormControl>
-                <Input type="number" placeholder="e.g., 400" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="in_stock"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Stock Level</FormLabel>
-              <FormControl>
-                <Input type="number" placeholder="e.g., 50" {...field} />
+                <Input placeholder="" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -131,6 +73,7 @@ export function AddItemForm() {
               <FormLabel>Category</FormLabel>
               <FormControl>
                 <Select
+                  {...field}
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
@@ -150,6 +93,74 @@ export function AddItemForm() {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="selling_price"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Sales Price</FormLabel>
+              <FormControl>
+                <Input placeholder="" type="number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="cost_price"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Cost Price</FormLabel>
+              <FormControl>
+                <Input placeholder="" type="number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="in_stock"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Stock Quantity</FormLabel>
+              <FormControl>
+                <Input placeholder="" type="number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {state.message && (
+          <div>
+            {state.message && <FormMessage>{state.message}</FormMessage>}
+            {state.errors && (
+              <div className="space-y-2">
+                {Object.entries(state.errors).map(([field, messages]) => {
+                  if (messages && messages.length > 0) {
+                    return (
+                      <FormMessage key={field}>
+                        <strong>
+                          {field
+                            .replace(/_/g, " ")
+                            .replace(/\b\w/g, (char) => char.toUpperCase())}
+                          :
+                        </strong>
+                        <ul className="list-disc pl-6">
+                          {messages.map((msg, index) => (
+                            <li key={index}>{msg}</li>
+                          ))}
+                        </ul>
+                      </FormMessage>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+            )}
+          </div>
+        )}
         <Button type="submit">Add Item</Button>
       </form>
     </Form>

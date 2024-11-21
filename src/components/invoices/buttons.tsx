@@ -25,22 +25,10 @@ export function UpdateInvoice({ id }: { id: string }) {
 }
 
 export function DeleteInvoice({ id }: { id: string }) {
-  // const deleteInvoiceWithId = deleteInvoice.bind(null, id);
-  const handleDeleteInvoice = async (formData: FormData): Promise<void> => {
-    const invoiceId = formData.get("id") as string;
-
-    if (!invoiceId) {
-      console.error("No invoice ID provided.");
-      return;
-    }
-
-    const response = await deleteInvoice(invoiceId);
-    console.log(response.message); // Log success or error message
-  };
+  const deleteInvoiceWithId = deleteInvoice.bind(null, id);
 
   return (
-    // <form action={deleteInvoiceWithId}>
-    <form action={handleDeleteInvoice}>
+    <form action={deleteInvoiceWithId}>
       <Button variant="outline" size="icon">
         <span className="sr-only">Delete</span>
         <Trash />
