@@ -55,7 +55,7 @@ const data = {
       items: [
         {
           title: "Transaction",
-          url: "/dashboard/transaction",
+          url: "#",
         },
         {
           title: "Invoices",
