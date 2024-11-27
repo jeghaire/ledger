@@ -35,7 +35,7 @@ export default async function Page({
         ]}
       />
       <div className="flex flex-1 flex-col gap-3 p-4 pt-0">
-        <h1 className="font-lusitana text-2xl">Invoices</h1>
+        <h1 className="font-heading text-2xl">Invoices</h1>
         <div className="flex max-w-lg items-center justify-between gap-2">
           <Search placeholder="Search invoices" />
           <CreateInvoice />

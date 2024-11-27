@@ -17,7 +17,7 @@ export default async function Page() {
         ]}
       />
       <div className="flex flex-1 flex-col gap-3 p-4 pt-0 md:max-w-lg">
-        <h1 className="font-lusitana text-2xl">Add Item</h1>
+        <h1 className="font-heading text-2xl">Add Item</h1>
         <AddItemForm />
       </div>
     </main>

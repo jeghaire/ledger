@@ -22,6 +22,8 @@ export function DataTableToolbar<TData>({
     <div className="flex items-center justify-between">
       <div className="flex flex-1 flex-wrap items-center gap-2">
         <Input
+          id="search-items"
+          name="search-items"
           placeholder="Filter items"
           value={table.getState().globalFilter ?? ""}
           onChange={(event) => table.setGlobalFilter(event.target.value)}

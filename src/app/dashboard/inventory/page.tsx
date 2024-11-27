@@ -21,7 +21,7 @@ export default async function PersonnelPage() {
         ]}
       />
       <div className="flex flex-1 flex-col gap-3 p-4 pt-0">
-        <h1 className="font-lusitana text-2xl">Inventory</h1>
+        <h1 className="font-heading text-2xl">Inventory</h1>
         <DataTable data={items} columns={columns} />
       </div>
     </>

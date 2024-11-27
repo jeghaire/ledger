@@ -55,14 +55,14 @@ export const columns: ColumnDef<ItemType>[] = [
   },
   {
     id: "Sales Price",
-    accessorKey: "selling_price",
+    accessorKey: "sales_price",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Sales Price" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="truncate font-medium">
+          <span className="truncate">
             {/* {row.getValue("Sales Price")} */}
             {formatCurrency(row.getValue("Sales Price"))}
           </span>
@@ -82,7 +82,7 @@ export const columns: ColumnDef<ItemType>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="truncate font-medium">
+          <span className="truncate">
             {/* {row.getValue("Cost Price")} */}
             {formatCurrency(row.getValue("Cost Price"))}
           </span>

@@ -10,8 +10,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        lusitana: ["var(--font-lusitana)"],
-        geistSans: ["var(--font-geist-sans)"],
+        heading: ["var(--font-heading)"],
+        body: ["var(--font-body)"],
       },
       colors: {
         background: "hsl(var(--background))",

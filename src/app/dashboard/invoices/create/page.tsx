@@ -20,7 +20,7 @@ export default async function Page() {
         ]}
       />
       <div className="flex flex-1 flex-col gap-3 p-4 pt-0">
-        <h1 className="font-lusitana text-2xl">Create Invoice</h1>
+        <h1 className="font-heading text-2xl">Create Invoice</h1>
         <Form customers={customers} />
       </div>
     </main>

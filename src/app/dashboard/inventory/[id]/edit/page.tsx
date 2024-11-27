@@ -26,8 +26,8 @@ export default async function Page({ params }: { params: { id: string } }) {
         ]}
       />
       <div className="flex flex-1 flex-col gap-3 p-4 pt-0 md:max-w-lg">
-        <h1 className="font-lusitana text-2xl">Edit Item</h1>
-        <EditItemForm item={item} />
+        <h1 className="font-heading text-2xl">Edit Item</h1>
+        <EditItemForm item={item} itemId={id} />
       </div>
     </main>
   );

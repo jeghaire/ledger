@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z, ZodTypeAny } from "zod";
 
 export const inventoryCategories = [
   { label: "Wine", value: "Wine" },
@@ -13,59 +13,49 @@ const categoryValues = inventoryCategories.map(
   (category) => category.value,
 ) as [string, ...string[]];
 
+export const zodInputStringPipe = (zodPipe: ZodTypeAny) =>
+  z.string().transform((value) => (value === '' ? null : value)).nullable().refine((value) => value === null || !isNaN(Number(value)), { message: 'Invalid Number', }).transform((value) => (value === null ? 0 : Number(value))).pipe(zodPipe);
+
+export const ItemFormSchema = z.object({
+  name: z.string({
+    required_error: "Name is required",
+    invalid_type_error: "Name must be a string",
+  }).min(1, "Name is required.").trim(),
+  category: z.string({
+    required_error: "Category is required",
+    invalid_type_error: "Category must be a string",
+  }).min(1, "Category is required.").trim(),
+  sales_price: zodInputStringPipe(z.number().positive('Sales Price must be greater than 0')),
+  cost_price: zodInputStringPipe(z.number().positive('Cost Price must be greater than 0')),
+  in_stock: zodInputStringPipe(z.number().nonnegative('Stock cannot be negative').int("Stock Quantity must be an integer.").min(5, "Stock Quantity must be at least 5.")),
+}).required();
+
 export const ItemSchema = z.object({
   id: z.number().int(),
-  name: z.string().min(1, {
-    message: "Name is required.",
-  }),
-  cost_price: z.coerce
-    .number()
-    .nonnegative({ message: "Cost price must be a non-negative number" }),
-  selling_price: z.coerce
-    .number()
-    .positive({ message: "Selling price must not be less that zero" }),
-  in_stock: z.coerce
-    .number({ required_error: "Age is required." })
-    .refine((value) => !isNaN(value), {
-      message: "Age must be a valid number.",
-    })
-    .default(0),
-  category: z.enum(categoryValues).default("Other"),
-  created_by: z.string().min(1),
-  updated_by: z.string().min(1),
-  created_at: z.date().default(() => new Date()),
-  updated_at: z.date().default(() => new Date()),
-});
-
-// Create form schema by omitting `id`, `created_at`, and `updated_at`
-export const itemFormSchema = ItemSchema.omit({
-  created_at: true,
-  updated_at: true,
-  created_by: true,
-  updated_by: true,
-});
-
-export const newItemSchema = z.object({
-  name: z.string().min(1, {
-    message: "Name is required.",
-  }),
-  cost_price: z.coerce
-    .number()
-    .nonnegative({ message: "Cost price must be a non-negative number" }),
-  selling_price: z.coerce
-    .number()
-    .positive({ message: "Selling price must not be less that zero" }),
-  in_stock: z.coerce.number().int().nonnegative(),
+  name: z.string({
+    required_error: "Name is required",
+    invalid_type_error: "Name must be a string",
+  }).min(1, "Name is required.").trim(),
   category: z.enum(categoryValues),
+  sales_price: zodInputStringPipe(z.number().positive('Sales Price must be greater than 0')),
+  cost_price: zodInputStringPipe(z.number().positive('Cost Price must be greater than 0')),
+  in_stock: z.number().nonnegative('Stock cannot be negative').int("Stock Quantity must be an integer.").min(5, "Stock Quantity must be at least 5."),
+  created_by: z.string().optional(),
+  updated_by: z.string().optional(),
+  created_at: z.date().optional(),
+  updated_at: z.date().optional(),
 });
 
 // Infer TypeScript types
 export type ItemType = z.infer<typeof ItemSchema>;
-export type ItemFormValues = z.infer<typeof itemFormSchema>;
-export type NewItemType = z.infer<typeof newItemSchema>;
+export type ItemFormType = z.infer<typeof ItemFormSchema>;
 
 export const UpdateStockSchema = z.object({
   id: z.number(),
   quantity_change: z.number(),
   change_type: z.enum(["addition", "deduction"]),
 });
+
+// category: z.enum(categoryValues).default("Other"),
+// z.number().or(z.literal(""))
+// category: z.enum(categoryValues),

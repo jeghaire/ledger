@@ -1,4 +1,4 @@
-import { lusitana, geistSans } from "~/app/fonts";
+import { headingFont, bodyFont } from "~/app/fonts";
 import "./globals.css";
 import type { Metadata } from "next";
 import { APP_NAME } from "~/core/constants";
@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${lusitana.variable} ${geistSans.variable} font-geistSans antialiased`}
+        className={`${headingFont.variable} ${bodyFont.variable} font-body antialiased`}
       >
         {children}
       </body>

@@ -22,20 +22,22 @@ import {
 } from "~/components/ui/select";
 import {
   inventoryCategories,
-  newItemSchema,
-  NewItemType,
+  ItemFormSchema,
+  ItemFormType,
 } from "../data/schema";
 import { useFormState } from "react-dom";
 import { createInventory } from "../data/actions";
 import React from "react";
+import Link from "next/link";
+import { SubmitButton } from "~/components/submit-button";
 
 export function AddItemForm() {
   const initialState = { message: null, errors: {} };
   const [state, formAction] = useFormState(createInventory, initialState);
   const formRef = React.useRef<HTMLFormElement>(null);
 
-  const form = useForm<NewItemType>({
-    resolver: zodResolver(newItemSchema),
+  const form = useForm<ItemFormType>({
+    resolver: zodResolver(ItemFormSchema),
     mode: "onChange",
   });
 
@@ -95,7 +97,7 @@ export function AddItemForm() {
         />
         <FormField
           control={form.control}
-          name="selling_price"
+          name="sales_price"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Sales Price</FormLabel>
@@ -132,36 +134,13 @@ export function AddItemForm() {
             </FormItem>
           )}
         />
-        {state.message && (
-          <div>
-            {state.message && <FormMessage>{state.message}</FormMessage>}
-            {state.errors && (
-              <div className="space-y-2">
-                {Object.entries(state.errors).map(([field, messages]) => {
-                  if (messages && messages.length > 0) {
-                    return (
-                      <FormMessage key={field}>
-                        <strong>
-                          {field
-                            .replace(/_/g, " ")
-                            .replace(/\b\w/g, (char) => char.toUpperCase())}
-                          :
-                        </strong>
-                        <ul className="list-disc pl-6">
-                          {messages.map((msg, index) => (
-                            <li key={index}>{msg}</li>
-                          ))}
-                        </ul>
-                      </FormMessage>
-                    );
-                  }
-                  return null;
-                })}
-              </div>
-            )}
-          </div>
-        )}
-        <Button type="submit">Add Item</Button>
+        {state.message && <FormMessage>{state.message}</FormMessage>}
+        <div className="flex justify-end gap-2">
+          <Button asChild variant="secondary">
+            <Link href={`/dashboard/inventory`}>Cancel</Link>
+          </Button>
+          <SubmitButton>Add Item</SubmitButton>
+        </div>
       </form>
     </Form>
   );

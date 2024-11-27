@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { newItemSchema } from "./schema";
+import { ItemFormSchema } from "./schema";
 import { sql } from "@vercel/postgres";
 import { redirect } from "next/navigation";
 
@@ -9,7 +9,7 @@ export type FormState = {
   errors?: {
     name?: string[];
     cost_price?: string[];
-    selling_price?: string[];
+    sales_price?: string[];
     in_stock?: string[];
     category?: string[];
   };
@@ -21,7 +21,7 @@ export async function createInventory(
   data: FormData,
 ): Promise<FormState> {
   const formData = Object.fromEntries(data);
-  const parsedData = newItemSchema.safeParse(formData);
+  const parsedData = ItemFormSchema.safeParse(formData);
 
   if (!parsedData.success) {
     return {
@@ -30,20 +30,20 @@ export async function createInventory(
     };
   }
 
-  const { name, cost_price, selling_price, in_stock, category } =
+  const { name, cost_price, sales_price, in_stock, category } =
     parsedData.data;
 
   // Do vaidation checks here
   if (in_stock < 5) {
     return {
-      message: "Stock cannot be less that five",
+      message: "Stock Quantity cannot be less that five",
     };
   }
 
   try {
     await sql`
-      INSERT INTO inventory (name, cost_price, selling_price, in_stock, category, created_by, updated_by)
-      VALUES (${name}, ${cost_price}, ${selling_price}, ${in_stock}, ${category}, 'jomavi@ledger.io', 'jomavi@ledger.io')
+      INSERT INTO inventory (name, cost_price, sales_price, in_stock, category, created_by, updated_by)
+      VALUES (${name}, ${cost_price}, ${sales_price}, ${in_stock}, ${category}, 'jomavi@ledger.io', 'jomavi@ledger.io')
     `;
   } catch (error) {
     console.error(error);
@@ -60,7 +60,7 @@ export async function updateInventory(
   data: FormData,
 ): Promise<FormState> {
   const formData = Object.fromEntries(data);
-  const parsedData = newItemSchema.safeParse(formData);
+  const parsedData = ItemFormSchema.safeParse(formData);
   if (!parsedData.success) {
     return {
       errors: parsedData.error.flatten().fieldErrors,
@@ -68,7 +68,7 @@ export async function updateInventory(
     };
   }
 
-  const { name, cost_price, selling_price, in_stock, category } =
+  const { name, cost_price, sales_price, in_stock, category } =
     parsedData.data;
   // Do vaidation checks here
   if (in_stock < 5) {
@@ -77,13 +77,10 @@ export async function updateInventory(
     };
   }
 
-
-  //  updated_at = NOW()
   try {
-
     await sql`
       UPDATE inventory
-      SET name = ${name}, cost_price = ${cost_price}, selling_price = ${selling_price}, in_stock = ${in_stock}, category = ${category}, updated_by = 'jomavi@ledger.io'
+      SET name = ${name}, cost_price = ${cost_price}, sales_price = ${sales_price}, in_stock = ${in_stock}, category = ${category}, updated_by = 'jomavi@ledger.io'
       WHERE id = ${id}
     `;
   } catch (error) {
@@ -95,7 +92,7 @@ export async function updateInventory(
   redirect("/dashboard/inventory");
 }
 
-export async function deleteItem(id: string): Promise<void> {
+export async function deleteItem(id: number): Promise<void> {
   try {
     await sql`DELETE FROM inventory WHERE id = ${id}`;
     revalidatePath("/dashboard/inventory");
