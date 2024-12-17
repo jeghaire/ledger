@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { ItemFormSchema } from "./schema";
+import { ItemFormSchema, UpdateStockSchema } from "./schema";
 import { sql } from "@vercel/postgres";
 import { redirect } from "next/navigation";
 
@@ -94,7 +94,13 @@ export async function updateInventory(
 
 export async function deleteItem(id: number): Promise<void> {
   try {
-    await sql`DELETE FROM inventory WHERE id = ${id}`;
+    console.log('deleting...')
+    // await sql`DELETE FROM inventory WHERE id = ${id}`;
+    await sql`UPDATE inventory SET status = FALSE WHERE id = ${id}`;
+    await sql`
+      INSERT INTO inventory_history (item_id, change_type, quantity_change, new_stock_level, changed_by)
+      VALUES (${id}, 'deletion', 0, 0, 'jomavi@ledger.io');
+    `;
     revalidatePath("/dashboard/inventory");
     // return { message: "Deleted Inventory." };
   } catch (error) {
@@ -102,3 +108,59 @@ export async function deleteItem(id: number): Promise<void> {
     // return { message: "Database Error: Failed to Delete Inventory." };
   }
 }
+
+export type StockFormState = {
+  errors?: {
+    item_id?: string[];
+    quantity_change?: string[];
+    change_type?: string[];
+  };
+  message?: string | null;
+};
+
+export async function updateStockLevel(
+  itemId: number,
+  prevState: StockFormState,
+  data: FormData,
+): Promise<StockFormState> {
+  const formData = Object.fromEntries(data);
+  const parsedData = UpdateStockSchema.safeParse(formData);
+  const { item_id, quantity_change, change_type } = UpdateStockSchema.parse(formData);
+
+  if (!parsedData.success) {
+    return {
+      errors: parsedData.error.flatten().fieldErrors,
+      message: "Missing Fields. Failed to update Inventory.",
+    };
+  }
+
+  // Fetch current stock level
+  const { rows: itemRows } = await sql`SELECT in_stock FROM inventory WHERE id = ${item_id}`;
+  if (itemRows.length === 0) throw new Error("Item not found.");
+
+  const currentStock = itemRows[0].in_stock;
+  const newStock = change_type === "addition"
+    ? currentStock + quantity_change
+    : currentStock - quantity_change;
+
+  if (newStock < 0) throw new Error("Insufficient stock.");
+
+  // Update inventory table
+  await sql`UPDATE inventory SET in_stock = ${newStock} WHERE id = ${item_id}`;
+
+  // Log to inventory_history
+  await sql`
+    INSERT INTO inventory_history (item_id, change_type, quantity_change, new_stock_level, changed_by)
+    VALUES (${item_id}, ${change_type}, ${quantity_change}, ${newStock}, 'jomavi@ledger.io')
+  `;
+
+  revalidatePath("/dashboard/inventory");
+  redirect("/dashboard/inventory");
+}
+
+export const formatCurrency = (amount: number) => {
+  return Number(amount).toLocaleString("en-NG", {
+    style: "currency",
+    currency: "NGN",
+  });
+};

@@ -2,12 +2,11 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "~/components/ui/checkbox";
-import { ItemType } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { formatCurrency } from "../data/utils";
+import { SaleItem } from "../data/schema";
 
-export const columns: ColumnDef<ItemType>[] = [
+export const columns: ColumnDef<SaleItem>[] = [
   {
     id: "actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,
@@ -37,15 +36,15 @@ export const columns: ColumnDef<ItemType>[] = [
     enableHiding: false,
   },
   {
-    id: "Name",
-    accessorKey: "name",
+    id: "Sale ID",
+    accessorKey: "sale_id",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
+      <DataTableColumnHeader column={column} title="Sale ID" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="truncate">{row.getValue("Name")}</span>
+          <span className="truncate">{row.getValue("Sale ID")}</span>
         </div>
       );
     },
@@ -54,17 +53,15 @@ export const columns: ColumnDef<ItemType>[] = [
     },
   },
   {
-    id: "Sales Price",
-    accessorKey: "sales_price",
+    id: "Item Name",
+    accessorKey: "item_name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Sales Price" />
+      <DataTableColumnHeader column={column} title="Item Name" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="truncate">
-            {formatCurrency(row.getValue("Sales Price"))}
-          </span>
+          <span className="truncate">{row.getValue("Item Name")}</span>
         </div>
       );
     },
@@ -73,17 +70,15 @@ export const columns: ColumnDef<ItemType>[] = [
     },
   },
   {
-    id: "Cost Price",
-    accessorKey: "cost_price",
+    id: "Quantity",
+    accessorKey: "quantity",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Cost Price" />
+      <DataTableColumnHeader column={column} title="Quantity" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="truncate">
-            {formatCurrency(row.getValue("Cost Price"))}
-          </span>
+          <span className="truncate">{row.getValue("Quantity")}</span>
         </div>
       );
     },
@@ -92,15 +87,15 @@ export const columns: ColumnDef<ItemType>[] = [
     },
   },
   {
-    id: "Stock Quantity",
-    accessorKey: "in_stock",
+    id: "Unit Price",
+    accessorKey: "unit_price",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Stock Quantity" />
+      <DataTableColumnHeader column={column} title="Unit Price" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="truncate">{row.getValue("Stock Quantity")}</span>
+          <span className="truncate">{row.getValue("Unit Price")}</span>
         </div>
       );
     },
@@ -109,15 +104,15 @@ export const columns: ColumnDef<ItemType>[] = [
     },
   },
   {
-    id: "Category",
-    accessorKey: "category",
+    id: "Total Amount",
+    accessorKey: "total_price",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Category" />
+      <DataTableColumnHeader column={column} title="Total Amount" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="truncate">{row.getValue("Category")}</span>
+          <span className="truncate">{row.getValue("Total Amount")}</span>
         </div>
       );
     },
@@ -126,21 +121,15 @@ export const columns: ColumnDef<ItemType>[] = [
     },
   },
   {
-    id: "Created At",
-    accessorKey: "created_at",
+    id: "Payment Method",
+    accessorKey: "payment_method",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Created At" />
+      <DataTableColumnHeader column={column} title="Payment Method" />
     ),
     cell: ({ row }) => {
-      const createdLast: Date = row.getValue("Created At");
-      // const createdLastString = new Date(createdLast).toLocaleDateString();
-      const createdLastString = new Date(createdLast)
-        .toISOString()
-        .split("T")[0];
-
       return (
         <div className="flex space-x-2">
-          <span className="truncate">{createdLastString}</span>
+          <span className="truncate">{row.getValue("Payment Method")}</span>
         </div>
       );
     },
@@ -166,38 +155,21 @@ export const columns: ColumnDef<ItemType>[] = [
     },
   },
   {
-    id: "Updated At",
-    accessorKey: "updated_at",
+    id: "Created On",
+    accessorKey: "created_at",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Updated At" />
+      <DataTableColumnHeader column={column} title="Created On" />
     ),
     cell: ({ row }) => {
-      const updatedLast: Date = row.getValue("Updated At");
-      // const updatedLastString = new Date(updatedLast).toLocaleDateString();
-      const updatedLastString = new Date(updatedLast)
+      const createdLast: Date = row.getValue("Created On");
+      // const createdLastString = new Date(createdLast).toLocaleDateString();
+      const createdLastString = new Date(createdLast)
         .toISOString()
         .split("T")[0];
 
       return (
         <div className="flex space-x-2">
-          <span className="truncate">{updatedLastString}</span>
-        </div>
-      );
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-  },
-  {
-    id: "Updated By",
-    accessorKey: "updated_by",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Updated By" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="truncate">{row.getValue("Updated By")}</span>
+          <span className="truncate">{createdLastString}</span>
         </div>
       );
     },

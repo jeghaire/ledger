@@ -7,7 +7,6 @@ import { DataTableViewOptions } from "./data-table-view-options";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 import { Plus, XIcon } from "lucide-react";
 import Link from "next/link";
-import { inventoryCategories } from "../data/schema";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -24,17 +23,20 @@ export function DataTableToolbar<TData>({
         <Input
           id="search-items"
           name="search-items"
-          type="search"
-          placeholder="Filter items"
+          placeholder="Filter sales"
           value={table.getState().globalFilter ?? ""}
           onChange={(event) => table.setGlobalFilter(event.target.value)}
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {table.getColumn("Category") && (
+        {table.getColumn("Payment Method") && (
           <DataTableFacetedFilter
-            column={table.getColumn("Category")}
-            title="Category"
-            options={inventoryCategories}
+            column={table.getColumn("Payment Method")}
+            title="Payment Method"
+            options={[
+              { label: "Cash", value: "cash" },
+              { label: "POS", value: "POS" },
+              { label: "Bank Transfer", value: "bank_transfer" },
+            ]}
           />
         )}
         {isFiltered && (
@@ -54,8 +56,8 @@ export function DataTableToolbar<TData>({
             className="h-8 px-2 lg:px-3"
             asChild
           >
-            <Link href="/dashboard/inventory/create">
-              <span className="hidden md:block">Add Item</span>
+            <Link href="/dashboard/sales">
+              <span className="hidden md:block">Make Sales</span>
               <Plus className="" />
             </Link>
           </Button>

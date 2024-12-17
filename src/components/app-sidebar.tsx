@@ -36,12 +36,12 @@ const data = {
   },
   teams: [
     {
-      name: "Ledger Inc",
+      name: "Ledger Inc.",
       logo: GalleryVerticalEnd,
       plan: "Enterprise",
     },
     {
-      name: "Mavi Inc",
+      name: "Mavi Inc.",
       logo: AudioWaveform,
       plan: "Startup",
     },
@@ -59,7 +59,7 @@ const data = {
         },
         {
           title: "Invoices",
-          url: "/dashboard/invoices",
+          url: "#",
         },
         {
           title: "Inventory",
@@ -67,7 +67,7 @@ const data = {
         },
         {
           title: "Sales",
-          url: "#",
+          url: "/dashboard/sales",
         },
       ],
     },

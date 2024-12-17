@@ -17,14 +17,8 @@ export const zodInputStringPipe = (zodPipe: ZodTypeAny) =>
   z.string().transform((value) => (value === '' ? null : value)).nullable().refine((value) => value === null || !isNaN(Number(value)), { message: 'Invalid Number', }).transform((value) => (value === null ? 0 : Number(value))).pipe(zodPipe);
 
 export const ItemFormSchema = z.object({
-  name: z.string({
-    required_error: "Name is required",
-    invalid_type_error: "Name must be a string",
-  }).min(1, "Name is required.").trim(),
-  category: z.string({
-    required_error: "Category is required",
-    invalid_type_error: "Category must be a string",
-  }).min(1, "Category is required.").trim(),
+  name: z.string().min(1, "Name is required.").trim(),
+  category: z.string().min(1, "Category is required.").trim(),
   sales_price: zodInputStringPipe(z.number().positive('Sales Price must be greater than 0')),
   cost_price: zodInputStringPipe(z.number().positive('Cost Price must be greater than 0')),
   in_stock: zodInputStringPipe(z.number().nonnegative('Stock cannot be negative').int("Stock Quantity must be an integer.").min(5, "Stock Quantity must be at least 5.")),
@@ -32,10 +26,7 @@ export const ItemFormSchema = z.object({
 
 export const ItemSchema = z.object({
   id: z.number().int(),
-  name: z.string({
-    required_error: "Name is required",
-    invalid_type_error: "Name must be a string",
-  }).min(1, "Name is required.").trim(),
+  name: z.string().min(1, "Name is required.").trim(),
   category: z.enum(categoryValues),
   sales_price: zodInputStringPipe(z.number().positive('Sales Price must be greater than 0')),
   cost_price: zodInputStringPipe(z.number().positive('Cost Price must be greater than 0')),
@@ -51,8 +42,8 @@ export type ItemType = z.infer<typeof ItemSchema>;
 export type ItemFormType = z.infer<typeof ItemFormSchema>;
 
 export const UpdateStockSchema = z.object({
-  id: z.number(),
-  quantity_change: z.number(),
+  item_id: z.coerce.number(),
+  quantity_change: z.coerce.number(),
   change_type: z.enum(["addition", "deduction"]),
 });
 

@@ -38,8 +38,8 @@ export function EditItemForm({
   item: ItemFormType;
 }) {
   const initialState = { message: null, errors: {} };
-  const updateInvoiceWithId = updateInventory.bind(null, itemId);
-  const [state, formAction] = useFormState(updateInvoiceWithId, initialState);
+  const updateInventoryWithId = updateInventory.bind(null, itemId);
+  const [state, formAction] = useFormState(updateInventoryWithId, initialState);
   const formRef = React.useRef<HTMLFormElement>(null);
   const form = useForm<ItemFormType>({
     resolver: zodResolver(ItemFormSchema),
@@ -146,7 +146,7 @@ export function EditItemForm({
             </FormItem>
           )}
         />
-        {state.message && <FormMessage>{state.message}</FormMessage>}
+        {state?.message && <FormMessage>{state.message}</FormMessage>}
         <div className="flex justify-end gap-2">
           <Button asChild variant="secondary">
             <Link href={`/dashboard/inventory`}>Cancel</Link>

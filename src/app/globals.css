@@ -29,6 +29,10 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
+input[type="search"]::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -106,8 +110,8 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@layer components {
+  .text-heading {
+    @apply text-balance font-heading text-3xl font-medium tracking-tight;
   }
 }

@@ -1,28 +1,28 @@
 import { Metadata } from "next";
-import { fetchCustomers } from "~/lib/data";
+import { columns } from "./components/columns";
+import { DataTable } from "./components/data-table";
+import { fetchSales } from "./data/utils";
 import { DashboardHeader } from "~/components/dashboard-header";
-import Form from "~/components/invoices/create-form";
 
 export const metadata: Metadata = {
-  title: "Create Invoice",
+  title: "Sales",
 };
 
 export default async function Page() {
-  const customers = await fetchCustomers();
+  const data = (await fetchSales()) ?? [];
 
   return (
-    <main>
+    <>
       <DashboardHeader
         breadcrumbs={[
           { title: "Dashboard", href: "/dashboard" },
-          { title: "Invoices", href: "/dashboard/invoices" },
-          { title: "Create Invoice" },
+          { title: "Sales" },
         ]}
       />
       <div className="flex flex-1 flex-col gap-3 p-4 pt-0">
-        <h1 className="text-heading">Create Invoice</h1>
-        <Form customers={customers} />
+        <h1 className="text-heading">Sales</h1>
+        <DataTable data={data} columns={columns} />
       </div>
-    </main>
+    </>
   );
 }
