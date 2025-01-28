@@ -64,14 +64,12 @@ export function SalesForm({ data }: { data: ItemType[] }) {
   const items = form.watch("items") || [];
   const paymentMethod = form.watch("payment_method");
 
-  function hasNonEmptyItems(arr: any[]) {
+  function hasNonEmptyItems(arr: Array<{ item: string }>) {
     return arr?.some(obj => 
       Object.keys(obj).includes('item') && obj.item !== ''
     );
   
   }
-
-  console.log(hasNonEmptyItems(items))
   
   const showSubmitButton = hasNonEmptyItems(items);
   const isSubmitEnabled = hasNonEmptyItems(items) && paymentMethod;

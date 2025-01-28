@@ -42,8 +42,59 @@ input[type="search"]::-webkit-search-cancel-button {
 .dark *::-webkit-scrollbar {
   width: 6px; /* width of the entire scrollbar */
   height: 6px; /* height of the entire scrollbar */
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #fff; /* color of the tracking area */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #fff; /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 2px solid #fff; /* creates padding around scroll thumb */
+}
+
+*:hover::-webkit-scrollbar-thumb {
+  background-color: #a3a3a3;
+  border-radius: 20px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #737373;
+}
+
+.dark *::-webkit-scrollbar-track {
+  background: var(--background); /* color of the tracking area */
+  background: black;
+}
+
+.dark *::-webkit-scrollbar-thumb {
+  background-color: #f0f2f5; /* color of the scroll thumb */
+  background-color: black;
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 2px solid #f0f2f5; /* creates padding around scroll thumb */
+}
+
+.dark *:hover::-webkit-scrollbar-thumb {
+  /* background-color: #f0f2f5; */
+  background-color: black;
+  border-radius: 20px;
+}
+
+.dark *::-webkit-scrollbar-thumb:hover {
+  /* background-color: #f0f2f5; */
+  background-color: black;
+}
+
+/* Works on Firefox */
+@-moz-document url-prefix() {
+  * {
+    scrollbar-width: thin;
+    /* scrollbar-color: #fff; */
+    scrollbar-color: black;
+  }
 }
 
 

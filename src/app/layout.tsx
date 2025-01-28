@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${headingFont.variable} ${bodyFont.variable} dark font-body antialiased`}
+        className={`${headingFont.variable} ${bodyFont.variable} font-body antialiased`}
       >
         {children}
       </body>
