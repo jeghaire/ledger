@@ -4,7 +4,7 @@ import { SalesForm } from "../components/sales-form";
 import { fetchItems } from "../../inventory/data/utils";
 
 export const metadata: Metadata = {
-  title: "Sales Point",
+  title: "New Sales",
 };
 
 export default async function Page() {
@@ -15,11 +15,12 @@ export default async function Page() {
       <DashboardHeader
         breadcrumbs={[
           { title: "Dashboard", href: "/dashboard" },
-          { title: "Sales Point" },
+          { title: "Sales", href: "/dashboard/sales" },
+          { title: "New Sales" },
         ]}
       />
       <div className="flex flex-1 flex-col gap-3 p-4 pt-0 md:max-w-xl">
-        <h1 className="text-heading">Sales Point</h1>
+        <h1 className="text-heading">New Sales</h1>
         <SalesForm data={data} />
       </div>
     </main>

@@ -23,7 +23,6 @@ export async function createSales(
   }
 ): Promise<FormState> {
 
-  console.log(saleData)
   if (saleData.items.length === 0) {
     return ({ message: 'You must add an item' })
   }
@@ -71,5 +70,5 @@ export async function createSales(
   }
 
   revalidatePath("/dashboard/sales/view");
-  redirect("/dashboard/sales/view");
+  redirect("/dashboard/sales");
 }

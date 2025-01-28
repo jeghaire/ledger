@@ -56,7 +56,7 @@ export function DataTableToolbar<TData>({
             className="h-8 px-2 lg:px-3"
             asChild
           >
-            <Link href="/dashboard/sales">
+            <Link href="/dashboard/sales/create">
               <span className="hidden md:block">Make Sales</span>
               <Plus className="" />
             </Link>

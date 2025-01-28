@@ -39,20 +39,20 @@ import {
 import { useFormState, useFormStatus } from "react-dom";
 import React from "react";
 import { createSales } from "../data/actions";
-import { salesFormSchema, salesFormValues } from "../data/schema";
+import { salesFormSchema, SalesFormValues } from "../data/schema";
 
 // This can come from your database or API.
-const defaultValues: Partial<salesFormValues> = {};
+const defaultValues: Partial<SalesFormValues> = {};
 
 export function SalesForm({ data }: { data: ItemType[] }) {
   const { pending } = useFormStatus();
   const initialState = { message: null, errors: {} };
   const [state, formAction] = useFormState(createSales, initialState);
 
-  const form = useForm<salesFormValues>({
+  const form = useForm<SalesFormValues>({
     resolver: zodResolver(salesFormSchema),
     defaultValues,
-    mode: "onChange",
+    mode: "onSubmit",
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -61,47 +61,39 @@ export function SalesForm({ data }: { data: ItemType[] }) {
   });
 
   // Watch values for conditional rendering
-  const items = form.watch("items");
-  // const paymentMethod = form.watch("payment_method");
+  const items = form.watch("items") || [];
+  const paymentMethod = form.watch("payment_method");
 
-  const isSubmitEnabled = items?.[0]?.item;
-  // && paymentMethod;
+  function hasNonEmptyItems(arr: any[]) {
+    return arr?.some(obj => 
+      Object.keys(obj).includes('item') && obj.item !== ''
+    );
+  
+  }
+
+  console.log(hasNonEmptyItems(items))
+  
+  const showSubmitButton = hasNonEmptyItems(items);
+  const isSubmitEnabled = hasNonEmptyItems(items) && paymentMethod;
 
   return (
     <Form {...form}>
       <form
         onSubmit={(evt) => {
           evt.preventDefault();
-          form.handleSubmit(formAction)(evt);
+          form.handleSubmit((data) => {
+            const updatedData = {
+              ...data,
+              items: data.items.map(item => ({
+                ...item,
+                quantity: item.quantity ?? 1,
+              })),
+            };
+            formAction(updatedData);
+          })(evt);
         }}
         className="space-y-8"
       >
-        <FormField
-          control={form.control}
-          name="payment_method"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="change_type">Category</FormLabel>
-              <FormControl>
-                <Select
-                  {...field}
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="cash">Cash</SelectItem>
-                    <SelectItem value="POS">POS</SelectItem>
-                    <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <div>
           {fields.map((field, index) => (
             <div key={field.id} className="mb-4 flex items-end space-x-2">
@@ -150,7 +142,7 @@ export function SalesForm({ data }: { data: ItemType[] }) {
                                       `items.${index}.price`,
                                       Number(item.sales_price),
                                     );
-                                    form.setValue(`items.${index}.quantity`, 1);
+                                    form.setValue(`items.${index}.quantity`, "1");
                                   }}
                                 >
                                   {item.name}
@@ -191,7 +183,7 @@ export function SalesForm({ data }: { data: ItemType[] }) {
                   return (
                     <FormItem className="w-[100px]">
                       <FormLabel>Quantity</FormLabel>
-                      <FormMessage />
+                      {/* <FormMessage /> */}
                       <FormControl>
                         <Input
                           type="number"
@@ -202,12 +194,14 @@ export function SalesForm({ data }: { data: ItemType[] }) {
                           step={1}
                           disabled={isDisabled}
                           onChange={(e) => {
-                            // Ensure the value is an integer and within bounds
-                            const value = Math.min(
-                              Math.max(1, Math.floor(Number(e.target.value))),
-                              maxStock,
-                            );
-                            field.onChange(value);
+                            if (e.target.value === "") {
+                              field.onChange(e.target.value);
+                            }else {
+                              if(Number(e.target.value) < 1){
+                                field.onChange("1");
+                              }else{
+                              field.onChange(Number(e.target.value) > maxStock ? maxStock.toString() : e.target.value);
+                              }}
                           }}
                         />
                       </FormControl>
@@ -248,10 +242,38 @@ export function SalesForm({ data }: { data: ItemType[] }) {
             Add Item
           </Button>
         </div>
-        {isSubmitEnabled && (
-          <Button type="submit" aria-disabled={pending}>
-            {pending ? "Submitting..." : "Submit"}
-          </Button>
+        {showSubmitButton && (
+            <FormField
+              control={form.control}
+              name="payment_method"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="change_type">Category</FormLabel>
+                  <FormControl>
+                    <Select
+                      {...field}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="cash">Cash</SelectItem>
+                        <SelectItem value="POS">POS</SelectItem>
+                        <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+                 )}
+              {isSubmitEnabled && (
+            <Button type="submit" aria-disabled={pending} disabled={!isSubmitEnabled}>
+              {pending ? "Submitting..." : "Submit"}
+            </Button>
         )}
       </form>
     </Form>

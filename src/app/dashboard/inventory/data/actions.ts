@@ -94,7 +94,6 @@ export async function updateInventory(
 
 export async function deleteItem(id: number): Promise<void> {
   try {
-    console.log('deleting...')
     // await sql`DELETE FROM inventory WHERE id = ${id}`;
     await sql`UPDATE inventory SET status = FALSE WHERE id = ${id}`;
     await sql`

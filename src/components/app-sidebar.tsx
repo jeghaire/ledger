@@ -67,7 +67,7 @@ const data = {
         },
         {
           title: "Sales",
-          url: "/dashboard/sales",
+          url: "/dashboard/sales/create",
         },
       ],
     },

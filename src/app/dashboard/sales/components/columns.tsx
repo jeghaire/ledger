@@ -138,23 +138,6 @@ export const columns: ColumnDef<SaleItem>[] = [
     },
   },
   {
-    id: "Created By",
-    accessorKey: "created_by",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Created By" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="truncate">{row.getValue("Created By")}</span>
-        </div>
-      );
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-  },
-  {
     id: "Created On",
     accessorKey: "created_at",
     header: ({ column }) => (
@@ -170,6 +153,23 @@ export const columns: ColumnDef<SaleItem>[] = [
       return (
         <div className="flex space-x-2">
           <span className="truncate">{createdLastString}</span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+  },
+  {
+    id: "Created By",
+    accessorKey: "created_by",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Created By" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="truncate">{row.getValue("Created By")}</span>
         </div>
       );
     },

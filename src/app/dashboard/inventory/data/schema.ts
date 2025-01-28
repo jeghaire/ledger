@@ -21,7 +21,7 @@ export const ItemFormSchema = z.object({
   category: z.string().min(1, "Category is required.").trim(),
   sales_price: zodInputStringPipe(z.number().positive('Sales Price must be greater than 0')),
   cost_price: zodInputStringPipe(z.number().positive('Cost Price must be greater than 0')),
-  in_stock: zodInputStringPipe(z.number().nonnegative('Stock cannot be negative').int("Stock Quantity must be an integer.").min(5, "Stock Quantity must be at least 5.")),
+  in_stock: zodInputStringPipe(z.number().nonnegative('Stock cannot be negative').int("Stock Quantity must be an integer.").min(1, "Stock Quantity must be at least 1.")),
 }).required();
 
 export const ItemSchema = z.object({
@@ -30,7 +30,7 @@ export const ItemSchema = z.object({
   category: z.enum(categoryValues),
   sales_price: zodInputStringPipe(z.number().positive('Sales Price must be greater than 0')),
   cost_price: zodInputStringPipe(z.number().positive('Cost Price must be greater than 0')),
-  in_stock: z.number().nonnegative('Stock cannot be negative').int("Stock Quantity must be an integer.").min(5, "Stock Quantity must be at least 5."),
+  in_stock: z.number().nonnegative('Stock cannot be negative').int("Stock Quantity must be an integer."),//.min(1, "Stock Quantity must be at least 5."),
   created_by: z.string().optional(),
   updated_by: z.string().optional(),
   created_at: z.date().optional(),

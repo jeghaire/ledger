@@ -3,7 +3,7 @@ import { DashboardHeader } from "~/components/dashboard-header";
 import { AddItemForm } from "../components/create-form";
 
 export const metadata: Metadata = {
-  title: "Add Item",
+  title: "New Item",
 };
 
 export default async function Page() {
